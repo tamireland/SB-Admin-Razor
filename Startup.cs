@@ -62,7 +62,8 @@ namespace SB_Admin_Razor
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            // Add Authentification
+            app.UseAuthentication();
             app.UseMvc();
         }
     }
