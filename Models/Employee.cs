@@ -26,6 +26,8 @@ namespace SB_Admin_Razor.Models
         private byte photoId;
         private DateTime dateCreated;
         private DateTime dateLastModified;
+        private int age;
+        private bool retired;
 
 
         [ScaffoldColumn(false)]
@@ -87,18 +89,56 @@ namespace SB_Admin_Razor.Models
             set { this.birthDate = value; }
         }
 
+
+        [EmailAddress]
         public string Email
         {
             get { return this.email; }
             set { this.email = value; }
         }
 
+        [Phone]
         public string PhoneNo
         {
             get { return this.phoneNo; }
             set { this.phoneNo = value; }
+        }
+
+        // IGNORE FROM EF MODEL
+        [NotMapped]
+        public int Age
+        {
+            get {
 
 
+                //return null if the date of birth  
+                //greater than the current date  
+                if (this.birthDate > DateTime.Now)
+                    return 0;
+                // get the basic number of years  
+                int years = DateTime.Now.Year - this.birthDate.Year;
+                // adjust the years against this year's  
+                // birthday  
+                if (DateTime.Now.Month < birthDate.Month ||
+                   (DateTime.Now.Month == birthDate.Month &&
+                    DateTime.Now.Day < birthDate.Day))
+                {
+                    years--;
+                }
+                // Don't return a negative number  
+                // for years alive  
+                if (years >= 0)
+                    return years;
+                else
+                    return 0;
+            }
+            set
+            {
+                // Set retired flag based on age being over 65
+                if (this.age > 65)
+                    this.retired = true;
+                this.age = value;
+            }
         }
 
         //public int Age
@@ -128,23 +168,40 @@ namespace SB_Admin_Razor.Models
         }
 
 
-
         public decimal Salary
         {
             get { return this.salary; }
             set { this.salary = value; }
 
         }
+        [Required]
+        public bool CurrentFlag
+        {
+            get { return this.currentFlag; }
+            set { this.currentFlag = value; }
 
+        }
 
-        //private bool currentFlag;
-        //private byte photoId;
-        //private DateTime dateCreated;
-        //private DateTime dateLastModified;
+        public byte PhotoId
+        {
+            get { return this.photoId; }
+            set { this.photoId = value; }
 
+        }
 
+        public DateTime DateCreated
+        {
+            get { return this.dateCreated; }
+            set { this.dateCreated = value; }
 
+        }
 
+        public DateTime DateLastModified
+        {
+            get { return this.dateLastModified; }
+            set { this.dateLastModified = value; }
+
+        }
 
     }
 }
